@@ -1,0 +1,195 @@
+package com.example.bossesapp_ikermuinos.views.gameinfo
+
+import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.bossesapp_ikermuinos.R
+import kotlin.math.abs
+
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+//@PreviewParameter(NavController)
+@Composable
+fun BloodborneScreen(navController: NavController) {
+
+    var swipeOffset by remember { mutableStateOf(0f) }
+    val maxSwipeDistance = 450f
+
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+
+        // Fondo
+        Image(
+            painter = painterResource(id = R.drawable.presencialunar),
+            contentDescription = "Presencia Lunar",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+        // Columna con borde exterior
+        Column(
+            modifier = Modifier
+                .padding(25.5.dp)
+                .fillMaxSize()
+                .clip(RoundedCornerShape(15.dp))
+                .background(Color(0xAA000000))
+                .border(
+                    width = 2.dp,
+                    brush = Brush.linearGradient(
+                        listOf(Color(0xFF541e1e), Color(0xFF853537))
+                    ),
+                    shape = RoundedCornerShape((15.dp))
+                )
+        ){}
+
+        // Columna con borde interior
+        Column(
+            modifier = Modifier
+                .padding(30.dp)
+                .fillMaxSize()
+                .border(
+                    width = 2.5.dp,
+                    brush = Brush.linearGradient(
+                        listOf(Color(0xFF853537), Color(0xFF541e1e))
+                    ),
+                    shape = RoundedCornerShape(10.dp)
+                )
+                .clip(RoundedCornerShape(10.dp))
+        ) {
+            // Título
+            Text(
+                text = "Bloodborne",
+                color = Color(0xFF853537),
+                fontSize = 20.sp,
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 50.dp)
+            )
+
+            // Año
+            Text(
+                text = "2015",
+                color = Color.White,
+                fontSize = 13.sp,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 10.dp)
+            )
+
+            // Imagen del juego con su Swipeable
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(0.dp, 10.dp, 0.dp, 0.dp)
+            ) {
+                Text(
+                    text = "Bloodborne",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .offset { IntOffset(-350, 0) }
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.bloodborne),
+                    contentDescription = "Bloodborne",
+                    modifier = Modifier
+                        .size(200.dp)
+                        .offset { IntOffset(swipeOffset.toInt(), 0) }
+                        .pointerInput(Unit) {
+                            detectHorizontalDragGestures(
+                                onDragEnd = {
+                                    if (abs(swipeOffset) < maxSwipeDistance / 2) {
+                                        swipeOffset = 0f
+                                    } else {
+                                        swipeOffset = -maxSwipeDistance
+                                    }
+                                },
+                                onHorizontalDrag = { _, dragAmount ->
+                                    swipeOffset = (swipeOffset + dragAmount)
+                                        .coerceIn(
+                                            -maxSwipeDistance,
+                                            0f
+                                        )
+                                }
+                            )
+                        }
+                )
+            }
+
+            // Descripción
+            Text(
+                text = "Bloodborne es un juego de rol de acción creado por Hidetaka Miyazaki de FromSoftware y publicado por JapanStudio y Sony Computer Entertainment el 24 de Marzo de 2015.\n\n" +
+                        "El juego, a diferencia del resto de juegos de la saga, tiene lugar en Yharnam, una ciudad con un estilo victoriano y misterioso, con un toque de horror cosmico inspirado en las obras de H.P. Lovecraft en algunos momentos.\n\n" +
+                        "Hasta a dia de hoy, Bloodborne es unicamente jugable en las ultimas plataformas de Sony, Playstation 4 y Playstation 5, algo que ha hecho que hasta a dia de hoy muchos fans de la saga sigan insistiendo a Sony un port a PC.\n\n" +
+                        "Bloodborne fue muy bien recibido, hasta el punto de ser el \"SoulsLike\" favorito de muchisima gente, debido a la atmosfera inquietante, el combate, sus entornos, entre otras cosas. El juego cuenta con una expansion llamada The Old Hunters",
+                color = Color.White,
+                fontSize = 13.sp,
+                textAlign = TextAlign.Justify,
+                modifier = Modifier
+                    .width(320.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 30.dp)
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            // Botón Buscador
+            Button(
+                shape = RoundedCornerShape(0.dp),
+                onClick = { navController.navigate("buscador") },
+                colors = ButtonDefaults.buttonColors(
+                    Color(0xFF853537)
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 12.5.dp)
+            ) {
+                Text(text = "IR AL BUSCADOR DE JEFES", color = Color.Black)
+            }
+        }
+    }
+}
